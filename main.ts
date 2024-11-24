@@ -24,9 +24,9 @@ app.use(
     name: 'my-test-session',
     secret: 's1',
     // maxAge: 24 * 60 * 60 * 1000, // 24 hours
-    cookie: { secure: false }, // for development, set 'secure: false' unless using https
+    cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 }, // for development, set 'secure: false' unless using https
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: true
   })
 )
 

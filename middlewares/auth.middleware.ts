@@ -5,6 +5,7 @@ import { CONFIG } from '../config'
 export function authMiddleware(req: Request, res: Response, next: NextFunction) {
   const { token } = req.session as any
   console.log('hi middleware', req.session)
+
   if (!token) {
     res.status(403).json({
       message: 'No Auth Token'
