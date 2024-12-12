@@ -24,7 +24,7 @@ const app = Express()
 connect()
 
 app.use(cors({
-  origin: 'https://expense-app-web.vercel.app/',
+  origin: 'https://expense-app-web.vercel.app',
   credentials: true // Allow cookies to be sent with the reques
 }))
 app.use(cookieParser())
