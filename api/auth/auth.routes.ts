@@ -8,7 +8,7 @@ const authRouter = Router()
 const secret = process.env.HASH_PASS || ''
 
 authRouter.post('/sign-up', async (req, res) => {
-  const { email, password } = req.body
+  const { email, password, name } = req.body
 
   const { db } = await connect()
   let user = await db.collection('users').findOne({ email })
@@ -18,16 +18,21 @@ authRouter.post('/sign-up', async (req, res) => {
   }
   const hashPassword = createHmac('sha256', secret).update(password).digest('hex')
 
-  const newUser = await db.collection('users').insertOne({ email, password: hashPassword, name: '', createdAt: new Date() })
+  const newUser = await db.collection('users').insertOne({ email, password: hashPassword, name, createdAt: new Date() })
   const token = sign({ id: newUser.insertedId, email }, CONFIG.JWT_KEY)
 
+  // Store the token in a cookie
+  res.cookie('Auth-Token', token, { httpOnly: true, secure: false }) // Set secure: true for HTTPS in production
+
   // @ts-ignore
-  req.session.userId = newUser.insertedId
-  // @ts-ignore
-  req.session.token = token
+  // req.session.userId = newUser.insertedId
+  // // @ts-ignore
+  // req.session.token = token
+
 
   res.json({
-    ...newUser
+    ...newUser,
+    token
   })
   return
 })
@@ -51,18 +56,20 @@ authRouter.post('/sign-in', async (req, res) => {
   }
 
   delete user.password
-  const token = sign({ id: user.insertedId, email }, CONFIG.JWT_KEY)
+  const token = sign({ id: user._id, email }, CONFIG.JWT_KEY)
 
+  // TODO: need to check why this cookie is not getting set in ui
   // Store the token in a cookie
-  // res.cookie('Auth-Token', token, { httpOnly: true, secure: false }) // Set secure: true for HTTPS in production
+  res.cookie('Auth-Token', token, { httpOnly: true, secure: false }) // Set secure: true for HTTPS in production
 
   // @ts-ignore
-  req.session.userId = user._id
-  // @ts-ignore
-  req.session.token = token
+  // req.session.userId = user._id
+  // // @ts-ignore
+  // req.session.token = token
 
   res.json({
-    ...user
+    ...user,
+    token
   })
 
   return
