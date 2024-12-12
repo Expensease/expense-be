@@ -24,7 +24,7 @@ const app = Express()
 connect()
 
 app.use(cors({
-  origin: '*',
+  origin: 'https://expense-app-be.onrender.com/',
   credentials: true // Allow cookies to be sent with the reques
 }))
 app.use(cookieParser())
