@@ -20,7 +20,7 @@ dotenv_1.default.config({
 const app = (0, express_1.default)();
 (0, db_1.connect)();
 app.use((0, cors_1.default)({
-    origin: '*',
+    origin: 'https://expense-app-web.vercel.app',
     credentials: true // Allow cookies to be sent with the reques
 }));
 app.use((0, cookie_parser_1.default)());
