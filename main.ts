@@ -22,11 +22,12 @@ dotenv.config({
 const app = Express()
 
 connect()
-
-app.use(cors({
-  origin: 'https://expense-app-web.vercel.app',
-  credentials: true // Allow cookies to be sent with the reques
-}))
+console.log('inside main')
+// app.use(cors({
+//   origin: 'https://expense-app-web.vercel.app',
+//   credentials: true // Allow cookies to be sent with the reques
+// }))
+app.use(cors())
 app.use(cookieParser())
 app.use(Express.json())
 
@@ -43,9 +44,10 @@ app.use(Express.json())
 
 app.use('/api', appRouter)
 
-app.use('*', (req, res) => {
-  res.json('Welcome to the Expense Ease Backend API')
-})
+// app.use('*', (req, res) => {
+//   res.json('Welcome to the Expense Ease Backend API')
+// })
 
 app.listen(4000, () => console.log('Running at port 4000...'))
 
+export default app

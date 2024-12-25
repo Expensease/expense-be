@@ -5,8 +5,9 @@ import { connect } from "../db";
 import { ObjectId } from "mongodb";
 
 export async function authMiddleware(req: Request, res: Response, next: NextFunction) {
-  const { token } = req.cookies as any
-  console.log('inside middleware', req.cookies)
+  // const { token } = req.cookies as any
+  const token = req.headers.token as string
+  console.log('inside middleware', token)
   if (!token) {
     res.status(403).json({
       message: 'No Auth Token'
@@ -31,7 +32,7 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
     })
     return
   }
-  // console.log(payload, user, 'user')
+  console.log(payload, user, 'user')
   res.locals.user = payload
   next()
 
